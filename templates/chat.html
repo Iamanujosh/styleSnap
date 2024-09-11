@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .chat-messages {
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #fafafa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .message.user {
+            background-color: #007bff;
+            color: white;
+            text-align: right;
+        }
+        .message.bot {
+            background-color: #f1f1f1;
+            color: black;
+            text-align: left;
+        }
+        .chat-input {
+            display: flex;
+            justify-content: space-between;
+        }
+        .chat-input input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .chat-input button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .chat-input button:hover {
+            background-color: #0056b3;
+        }
+        .chat-input input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Gemini Chatbot</h1>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will appear here -->
+        </div>
+
+        <form class="chat-input" id="chatForm" enctype="multipart/form-data">
+            <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
+            <button type="submit">Send</button>
+            <input type="file" id="photoInput" accept="image/*">
+            <button type="button" id="uploadButton">Upload Photo</button>
+        </form>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chatForm');
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const photoInput = document.getElementById('photoInput');
+        const uploadButton = document.getElementById('uploadButton');
+
+        // Show file selection when the "Upload Photo" button is clicked
+        uploadButton.addEventListener('click', function() {
+            photoInput.click();
+        });
+
+        // Handle chat form submission (both text and photo)
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userMessage = messageInput.value.trim();
+            const userPhoto = photoInput.files[0];
+
+            if (userMessage !== '' || userPhoto) {
+                if (userMessage !== '') {
+                    appendMessage(userMessage, 'user');
+                    messageInput.value = '';
+                }
+
+                if (userPhoto) {
+                    appendMessage('Photo uploaded: ' + userPhoto.name, 'user');
+                    // Add photo upload functionality here
+                    photoInput.value = '';  // Reset file input after upload
+                }
+
+                setTimeout(() => {
+                    appendMessage("Processing your request...", 'bot');
+                    // Simulate processing the image or providing suggestions
+                }, 1000);
+            }
+        });
+
+        function appendMessage(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            messageDiv.innerText = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;  // Auto scroll to latest message
+        }
+    </script>
+</body>
+</html>
