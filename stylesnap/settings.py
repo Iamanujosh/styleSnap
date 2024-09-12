@@ -21,6 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'pyqab6j(g2_5ct=^5v9s+z9um%5uas0(zd_7z-5g8i^$-#yuok'
+GEMINI_API_KEY = 'your-gemini-api-key-here'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
