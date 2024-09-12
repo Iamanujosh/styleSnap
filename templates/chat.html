@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini Chatbot</title>
+    <title>StyleSnap Chatbot</title>
     <style>
         body {
+            background-color: #0d1117;
+            color: white;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .chat-container {
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
-            background-color: white;
+            background-color: #161b22;
             border: 1px solid #ccc;
             border-radius: 10px;
             padding: 20px;
@@ -26,7 +29,7 @@
             overflow-y: scroll;
             border: 1px solid #ddd;
             padding: 10px;
-            background-color: #fafafa;
+            background-color: #696464;
             border-radius: 10px;
             margin-bottom: 20px;
         }
@@ -36,13 +39,13 @@
             border-radius: 8px;
         }
         .message.user {
-            background-color: #007bff;
+            background-color: #238636;
             color: white;
             text-align: right;
         }
         .message.bot {
-            background-color: #f1f1f1;
-            color: black;
+            background-color: #100f0f;
+            color: rgb(249, 246, 246);
             text-align: left;
         }
         .chat-input {
@@ -57,30 +60,43 @@
             margin-right: 10px;
         }
         .chat-input button {
-            padding: 10px 20px;
-            background-color: #007bff;
+            background-color: #238636;
             color: white;
+            padding: 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
+            width: 100%;
             cursor: pointer;
+            margin: 10px;
         }
         .chat-input button:hover {
-            background-color: #0056b3;
+            background-color: #2ea043;
         }
         .chat-input input[type="file"] {
             display: none;
+        }
+        .chat-container input[type="text"]
+        {
+            width: 90%;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            background-color: #0d1117;
+            color: white;
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
-        <h1>Gemini Chatbot</h1>
+        <h1>StyleSnap Chatbot</h1>
         <div class="chat-messages" id="chatMessages">
             <!-- Messages will appear here -->
         </div>
 
+        <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
+
         <form class="chat-input" id="chatForm" enctype="multipart/form-data">
-            <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
             <button type="submit">Send</button>
             <input type="file" id="photoInput" accept="image/*">
             <button type="button" id="uploadButton">Upload Photo</button>
