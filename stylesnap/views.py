@@ -11,12 +11,43 @@ from django.core.files.storage import FileSystemStorage
 import os
 import google.generativeai as genai
 from django.shortcuts import render
+from django.http import JsonResponse
 
 # Configure the API key
 my_api_key = 'AIzaSyDPUUCaXw0iFJdjqbsVnsAcTJJpmBEF6t0'
 genai.configure(api_key=my_api_key)
 
 # Initialize model configuration
+# generation_config = {
+#     "temperature": 0,
+#     "top_p": 0.95,
+#     "top_k": 64,
+#     "max_output_tokens": 8192,
+#     "response_mime_type": "text/plain",
+# }
+
+# model = genai.GenerativeModel(
+#     model_name="gemini-1.5-pro",
+#     generation_config=generation_config
+# )
+
+# history = []
+
+# def chatbot(request):
+#     if request.method == "POST":
+#         user_input = request.POST.get("user_input")
+#         chat_session = model.start_chat(history=history)
+#         response = chat_session.send_message(user_input)
+#         model_response = response.text
+
+#         # Append the conversation history
+#         history.append({"role": "user", "parts": [user_input]})
+#         history.append({"role": "model", "parts": [model_response]})
+
+#         return render(request, 'chatbot.html', {'bot_response': model_response, 'user_input': user_input})
+
+#     return render(request, 'chatbot.html', {'bot_response': 'Hello, how can I help you?'})
+
 generation_config = {
     "temperature": 0,
     "top_p": 0.95,
@@ -25,27 +56,35 @@ generation_config = {
     "response_mime_type": "text/plain",
 }
 
-model = genai.GenerativeModel(
-    model_name="gemini-1.5-pro",
-    generation_config=generation_config
-)
-
+model = genai.GenerativeModel(model_name="gemini-1.5-pro", generation_config=generation_config)
 history = []
 
 def chatbot(request):
     if request.method == "POST":
         user_input = request.POST.get("user_input")
-        chat_session = model.start_chat(history=history)
-        response = chat_session.send_message(user_input)
-        model_response = response.text
 
-        # Append the conversation history
-        history.append({"role": "user", "parts": [user_input]})
-        history.append({"role": "model", "parts": [model_response]})
+        if not user_input:
+            return JsonResponse({'error': 'No user input provided'}, status=400)
 
-        return render(request, 'chatbot.html', {'bot_response': model_response, 'user_input': user_input})
+        try:
+            chat_session = model.start_chat(history=history)
+            response = chat_session.send_message(user_input)
+            model_response = response.text
 
-    return render(request, 'chatbot.html', {'bot_response': 'Hello, how can I help you?'})
+            # Append user and bot messages to the history
+            history.append({"role": "user", "parts": [user_input]})
+            history.append({"role": "model", "parts": [model_response]})
+
+            # Return JSON response for the bot's reply
+            return JsonResponse({'bot_response': model_response, 'history': history})
+
+        except Exception as e:
+            # Log the exception
+            print(f"Error: {e}")
+            return JsonResponse({'error': str(e)}, status=500)
+
+    # Render the initial chat page with existing history
+    return render(request, 'chatbot.html', {'messages': history})
 
 def home_view(request):
     return render(request,'home.html')
