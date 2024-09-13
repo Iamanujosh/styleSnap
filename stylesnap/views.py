@@ -17,37 +17,6 @@ from django.http import JsonResponse
 my_api_key = 'AIzaSyDPUUCaXw0iFJdjqbsVnsAcTJJpmBEF6t0'
 genai.configure(api_key=my_api_key)
 
-# Initialize model configuration
-# generation_config = {
-#     "temperature": 0,
-#     "top_p": 0.95,
-#     "top_k": 64,
-#     "max_output_tokens": 8192,
-#     "response_mime_type": "text/plain",
-# }
-
-# model = genai.GenerativeModel(
-#     model_name="gemini-1.5-pro",
-#     generation_config=generation_config
-# )
-
-# history = []
-
-# def chatbot(request):
-#     if request.method == "POST":
-#         user_input = request.POST.get("user_input")
-#         chat_session = model.start_chat(history=history)
-#         response = chat_session.send_message(user_input)
-#         model_response = response.text
-
-#         # Append the conversation history
-#         history.append({"role": "user", "parts": [user_input]})
-#         history.append({"role": "model", "parts": [model_response]})
-
-#         return render(request, 'chatbot.html', {'bot_response': model_response, 'user_input': user_input})
-
-#     return render(request, 'chatbot.html', {'bot_response': 'Hello, how can I help you?'})
-
 generation_config = {
     "temperature": 0,
     "top_p": 0.95,
@@ -100,7 +69,7 @@ def login_view(request):
             
             if user is not None:
                 login(request, user)
-                return redirect('chat')  # Redirect to home page after successful login
+                return redirect('chatbot')  # Redirect to home page after successful login
             else:
                 messages.error(request, 'Invalid username or password.')
         else:
@@ -121,7 +90,4 @@ def register_view(request):
         form = forms.RegisterForm()
     
     return render(request, 'register.html', {'form': form})
-
-
-def chat_view(request):
-       return render(request, 'chat.html')    
+   
