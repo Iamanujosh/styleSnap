@@ -18,11 +18,13 @@ from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path
+#from .views import chat_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home_view,name='home'),
-    path('login/',views.login_view,name='login'),
+    path('', views.home_view, name='home'),
+    path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
-    path('chatbot/',views.chatbot,name="chatbot"),
-
+    path('chat/', views.chatbot, name='chatbot'),  # Updated to use the chatbot view
 ]

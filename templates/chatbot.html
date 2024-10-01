@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat with Bot</title>
     <style>
         body {
-            background-color: #0d1117;
-            color: white;
+            background-color: black;
+            color: #e9f5f5;
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -15,80 +16,117 @@
             height: 100vh;
             margin: 0;
         }
+
         .chat-container {
             width: 100%;
-            max-width: 600px;
+            max-width: 400px;
             margin: 0 auto;
-            background-color: #161b22;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
         }
+
+        .header i {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: #4ecca3;
+            font-size: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #555;
+            font-weight: normal;
+            margin-bottom: 20px;
+        }
+
         .chat-messages {
-            height: 400px;
+            height: 300px;
             overflow-y: scroll;
             border: 1px solid #ddd;
             padding: 10px;
-            background-color: #696464;
+            background-color: #f4f4f9;
             border-radius: 10px;
             margin-bottom: 20px;
         }
+
         .message {
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 8px;
         }
+
         .message.user {
-            background-color: #238636;
-            color: white;
+            background-color: #daf7e0;
+            color: #333;
             text-align: right;
         }
+
         .message.bot {
-            background-color: #100f0f;
-            color: rgb(249, 246, 246);
+            background-color: #eff2f5;
+            color: #333;
             text-align: left;
         }
+
         .chat-input {
             display: flex;
             justify-content: space-between;
         }
+
         .chat-input input[type="text"] {
             flex: 1;
             padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 20px;
             margin-right: 10px;
+            background-color: #f1f1f1;
         }
+
         .chat-input button {
-            background-color: #238636;
+            background-color: #00a78e;
             color: white;
             padding: 10px;
             border: none;
-            border-radius: 6px;
-            width: 100%;
+            border-radius: 20px;
             cursor: pointer;
+            font-size: 16px;
         }
+
         .chat-input button:hover {
-            background-color: #2ea043;
+            background-color: #00927a;
+        }
+
+        .chat-input input[type="text"]::placeholder {
+            color: #bbb;
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
-        <h1>Chat with Bot</h1>
+        <h1>StyleSnap Bot</h1>
+        <div class="header">
+            <i class="fas fa-tshirt" style="color: #4ecca3; font-size: 24px;"></i>
+        </div>
         <div class="chat-messages" id="chatMessages">
             <!-- Messages will be appended here dynamically -->
+            {% for message in messages %}
+                <div class="message {{ message.role }}">
+                    <strong>{{ message.role|title }}:</strong> {{ message.parts.0 }}
+                </div>
+            {% endfor %}
         </div>
         <form class="chat-input" method="POST" id="chatForm">
             {% csrf_token %}
             <input type="text" name="user_input" id="user_input" placeholder="Type your message here" autocomplete="off">
-            <button type="submit">Send</button>
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
         </form>
+        
     </div>
 
     <script>
-        // Handle form submission
         document.getElementById("chatForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent page refresh
 
@@ -110,7 +148,7 @@
             // Send the user input to the server using AJAX (Fetch API)
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-            fetch("", {
+            fetch("/chat/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
