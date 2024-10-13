@@ -3,6 +3,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 import re
+from django import forms
+from .models import Profile
+
+# Form for collecting user profile information
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile  # Model this form is based on (Profile model)
+        fields = ['body_type', 'skin_tone', 'height', 'weight', 'location', 'age_group']  # Fields to include in the form
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
